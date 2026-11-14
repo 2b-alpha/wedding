@@ -1,4 +1,5 @@
 import config from "./config.js";
+import { variantNav } from "./covers.js";
 import { countdown, weddingInstant } from "./dates.js";
 import { prepareIntro } from "./intro.js";
 import { initLightbox } from "./lightbox.js";
@@ -9,7 +10,10 @@ import { copyText, toast } from "./ui.js";
 const app = document.getElementById("app");
 const { groom, bride } = config.couple;
 await prepareIntro(`${groom.name}${bride.name}&Save the date 0123456789. SAT 오전오후낮시분 ${config.venue.name}${config.venue.address}${config.venue.hall}`);
-app.innerHTML = renderPage(config);
+// 대문 시안 비교용 페이지(/A/ ~ /F/)는 <html data-variant> 로 시안을 정한다. 기본 주소는 A
+const variant = document.documentElement.dataset.variant;
+app.innerHTML = renderPage(config, new Date(), variant ?? "A");
+if (variant) document.body.insertAdjacentHTML("beforeend", variantNav(variant));
 
 initRsvp(app, config);
 initLightbox(app, galleryItems(config.gallery));

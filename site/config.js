@@ -38,7 +38,9 @@ export default {
   },
 
   cover: {
-    photo: "", // TODO 대문 사진 경로 (예: "photos/cover.jpg"). 세로 사진
+    // TODO 대문 사진. 지금은 시안 비교용 임시 사진(Unsplash 무료 사진)이다. 받으면 경로를 바꾸고 sampleLabel 을 지운다
+    photo: "photos/cover-sample.jpg", // 세로 사진 (예: "photos/cover.jpg")
+    sampleLabel: "임시 사진", // 대문 오른쪽 위에 붙는 표시. 진짜 사진을 넣으면 "" 로
   },
 
   greeting: {

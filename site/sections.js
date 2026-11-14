@@ -1,53 +1,23 @@
 // config 를 받아 섹션 HTML 을 만든다. 동작(복사·폼·사진 넘기기)은 main.js 와 각 모듈이 붙인다.
-import {
-  daysUntil,
-  formatDateKo,
-  formatDotEn,
-  formatShortKo,
-  formatTimeKo,
-  isOpenUntil,
-  monthGrid,
-} from "./dates.js";
-
-const esc = (s) =>
-  String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
-const lines = (s) => esc(s).replace(/\n/g, "<br>");
+import { renderCover } from "./covers.js";
+import { daysUntil, formatDateKo, formatShortKo, formatTimeKo, isOpenUntil, monthGrid } from "./dates.js";
+import { asset, esc, lines } from "./html.js";
 
 const head = (eyebrow, title) =>
   `<header class="sec-head"><p class="eyebrow">${eyebrow}</p>${title ? `<h2>${esc(title)}</h2>` : ""}</header>`;
 
-const venueLine = (v) => (v.name ? `${v.name} ${v.hall}` : `${v.address}, ${v.hall}`);
-
-/** 사진 목록을 { src, thumb } 로 통일. 사진이 없으면 빈 칸(placeholder)을 만든다 */
+/** 사진 목록을 { src, thumb } (절대 주소) 로 통일. 사진이 없으면 빈 칸(placeholder)을 만든다 */
 export function galleryItems(gallery) {
   if (gallery.photos.length) {
-    return gallery.photos.map((p) => (typeof p === "string" ? { src: p, thumb: p } : { thumb: p.src, ...p }));
+    return gallery.photos.map((p) => {
+      const { src, thumb = src } = typeof p === "string" ? { src: p } : p;
+      return { src: asset(src), thumb: asset(thumb) };
+    });
   }
   return Array.from({ length: gallery.placeholderCount }, (_, i) => ({ placeholder: true, hue: (i * 47) % 360 }));
 }
 
 export const placeholderStyle = (item) => `background:hsl(${item.hue} 22% 82%)`;
-
-function cover(c) {
-  const { groom, bride } = c.couple;
-  const { photo } = c.cover;
-  const bg = photo ? ` style="background-image:url('${esc(photo)}')"` : "";
-  // 인트로 순서: 수평선·빛(0.1s~) → 이름이 선 위로 떠오름(0.5s) → 사진이 원형으로 열림(1.3s)
-  //   → 이름이 제자리로 내려감(1.4s) → 날짜·장소·버튼(2.1s~) → 스크롤 안내(2.9s)
-  return `
-<section id="cover" class="cover">
-  <div class="cover-photo${photo ? "" : " is-empty"}"${bg}>${photo ? "" : `<span class="ph-label">대문 사진 (세로)</span>`}</div>
-  <div class="cover-shade"></div>
-  <div class="cover-glow" aria-hidden="true"></div>
-  <div class="cover-line" aria-hidden="true"></div>
-  <p class="cover-eyebrow fu" style="--d:2.1s">Save the date</p>
-  <h1 class="cover-names"><span>${esc(groom.name)}<em>&amp;</em>${esc(bride.name)}</span></h1>
-  <p class="cover-when fu" style="--d:2.2s">${formatDotEn(c.wedding.date)} · ${formatTimeKo(c.wedding.time)}</p>
-  <p class="cover-where fu" style="--d:2.3s">${esc(venueLine(c.venue))}</p>
-  <div class="cover-cta fu" style="--d:2.45s"><a class="pill pill-light" href="#location">오시는 길</a></div>
-  <svg class="cover-hint" viewBox="0 0 20 12" aria-hidden="true"><path d="M2 2l8 8 8-8"/></svg>
-</section>`;
-}
 
 function greeting(c) {
   const family = (p) =>
@@ -207,7 +177,7 @@ function footer(c) {
 </footer>`;
 }
 
-/** 페이지 전체. 섹션 순서는 여기서 바꾼다 */
-export function renderPage(c, now = new Date()) {
-  return [cover(c), greeting(c), rsvp(c, now), calendar(c, now), gallery(c), guide(c), accounts(c), location(c), footer(c)].join("");
+/** 페이지 전체. 섹션 순서는 여기서 바꾼다. variant 는 대문 시안(A~F) */
+export function renderPage(c, now = new Date(), variant = "A") {
+  return [renderCover(c, variant), greeting(c), rsvp(c, now), calendar(c, now), gallery(c), guide(c), accounts(c), location(c), footer(c)].join("");
 }

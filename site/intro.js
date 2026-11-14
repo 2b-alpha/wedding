@@ -11,7 +11,7 @@ export async function prepareIntro(sample) {
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
   scrollTo(0, 0);
   // 글꼴이 늦게 오면 애니메이션 도중에 글꼴이 바뀌어 보인다
-  const fonts = ['500 25px "Noto Serif KR"', '400 14px "Noto Serif KR"', 'italic 400 21px "Cormorant Garamond"'].map((f) =>
+  const fonts = ['500 25px "Noto Serif KR"', '400 14px "Noto Serif KR"', '700 100px "Noto Serif KR"', 'italic 400 21px "Cormorant Garamond"'].map((f) =>
     document.fonts.load(f, sample),
   );
   await Promise.race([Promise.allSettled(fonts), new Promise((r) => setTimeout(r, FONT_WAIT_MS))]);

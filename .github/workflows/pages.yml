@@ -32,8 +32,8 @@ jobs:
         run: |
           v=${GITHUB_SHA::8}
           sed -i -E "s#(from \"\./[a-z]+\.js)\"#\1?v=$v\"#g" site/*.js
-          sed -i -E "s#(src=\"main\.js|href=\"styles\.css)\"#\1?v=$v\"#g" site/index.html
-          grep -c "?v=$v" site/*.js site/index.html
+          sed -i -E "s#((src|href)=\"(\.\./)?(main\.js|styles\.css|covers\.css))\"#\1?v=$v\"#g" site/index.html site/*/index.html
+          grep -c "?v=$v" site/*.js site/index.html site/*/index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
