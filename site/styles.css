@@ -24,18 +24,17 @@ button:disabled { opacity: .5; cursor: default; }
 
 .page { width: min(100%, 430px); margin: 0 auto; min-height: 100svh; background: var(--bg); overflow-x: hidden; box-shadow: 0 0 40px rgba(60, 40, 20, .08); }
 
-/* 첫 화면 등장 */
+/* 첫 화면 등장. 나타나기 전(visibility: hidden)에는 눌리지도 않는다 — 숨은 "오시는 길" 버튼이 눌리는 걸 막는다 */
 .fu { animation: fadeUp .9s cubic-bezier(.2, .7, .2, 1) var(--d, 0s) both; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); visibility: hidden; } }
 @keyframes bob { 50% { transform: translateY(5px); } }
 
 /* ---------- 대문 + 인트로(C안 · 잔광) ----------
    각 요소의 기본 스타일 = 인트로가 끝난 화면. 애니메이션은 시작 상태에서 여기로 온다.
-   .skip 이 붙으면(탭·스와이프, '동작 줄이기') 애니메이션을 끄고 바로 끝 화면을 보여 준다.
+   그래서 '동작 줄이기'로 애니메이션을 끄면 바로 끝 화면이 보인다.
    위치는 화면 높이 비율(svh)이라, 수평선(46%)과 이름(62%)의 간격이 어느 폰에서나 같다. */
 .page:empty { background: #07080d; } /* 글꼴을 기다리는 동안 밝은 화면이 번쩍이지 않게 */
 .cover { position: relative; height: 100vh; height: 100svh; overflow: hidden; background: #07080d; color: #fbf5ee; }
-.cover.skip, .cover.skip * { animation: none !important; }
 .cover > * { position: absolute; left: 0; right: 0; text-align: center; }
 .cover-photo { inset: 0; background: center / cover no-repeat; clip-path: circle(150% at 50% 46%); animation: coverReveal 1.25s cubic-bezier(.55, 0, .15, 1) 1.3s both; }
 .cover-photo.is-empty { background: radial-gradient(130% 62% at 50% 46%, #f7cfa6 0%, #e39479 16%, #9a5872 36%, #3b2f55 62%, #16152b 100%); }
@@ -51,7 +50,6 @@ button:disabled { opacity: .5; cursor: default; }
 .cover-where { top: calc(62svh + 80px); padding: 0 24px; font: 400 12.5px/1 var(--serif); letter-spacing: .04em; color: rgba(251, 245, 238, .62); }
 .cover-cta { top: calc(62svh + 108px); }
 .cover-hint { left: 50%; right: auto; bottom: calc(26px + env(safe-area-inset-bottom)); width: 20px; height: 12px; margin-left: -10px; fill: none; stroke: rgba(255, 255, 255, .6); stroke-width: 1.5; animation: fadeIn .6s ease 2.9s both, bob 1.8s ease-in-out 3.5s infinite; }
-.cover.skip .cover-hint { animation: bob 1.8s ease-in-out infinite !important; }
 @keyframes fadeIn { from { opacity: 0; } }
 @keyframes coverReveal { from { clip-path: circle(0% at 50% 46%); } }
 @keyframes coverGlow { 0% { opacity: 0; transform: translateY(12svh) scale(.7); } 45% { opacity: 1; transform: none; } 75% { opacity: 1; } 100% { opacity: 0; } }
@@ -205,6 +203,4 @@ legend, .field > span { display: block; margin-bottom: 8px; font: 500 13px/1.4 v
 /* '동작 줄이기'를 켠 기기는 움직임 없이 끝 화면만 */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { animation: none !important; transition: none !important; }
-  .cover.skip .cover-hint { animation: none !important; } /* 위의 건너뛰기용 화살표 까딱임보다 뒤에 와서 이긴다 */
-}
+  *, *::before, *::after { animation: none !important; transition: none !important; }}
