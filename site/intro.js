@@ -1,28 +1,14 @@
 // 대문 인트로(C안 · 잔광): 어둠 속 수평선에서 이름이 떠오르고 사진이 밝아온다.
 // 움직임 자체는 styles.css 의 cover-* 애니메이션이고, 여기서는 재생 여부와 건너뛰기만 다룬다.
 // 건너뛰기 = 대문에 .skip 을 붙여 애니메이션을 끄는 것. 각 요소의 기본 스타일이 곧 끝 화면이다.
+// 열 때마다 재생하고, 탭·스와이프하면 바로 끝 화면으로 넘어간다.
 
-const SEEN_KEY = "mwi-intro-seen";
 const INTRO_MS = 3500; // 마지막 요소(스크롤 안내)가 나타날 때까지
 const FONT_WAIT_MS = 1500;
 
-/**
- * "play" | "revisit" | "reduced"
- * 처음 열면 재생, 다시 열면 생략(당일 지도를 찾으러 다시 여는 하객용).
- * 주소에 ?intro 를 붙이면 '동작 줄이기' 설정까지 무시하고 항상 재생한다(신랑·신부 확인용).
- */
+/** "play" | "reduced" — 기기에서 '동작 줄이기'를 켰으면 움직임 없이 끝 화면만 */
 export function introMode() {
-  let seen = false;
-  try {
-    seen = localStorage.getItem(SEEN_KEY) === "1";
-    localStorage.setItem(SEEN_KEY, "1");
-  } catch {}
-  if (new URLSearchParams(location.search).has("intro")) {
-    document.documentElement.classList.add("force-motion");
-    return "play";
-  }
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return "reduced";
-  return seen ? "revisit" : "play";
+  return matchMedia("(prefers-reduced-motion: reduce)").matches ? "reduced" : "play";
 }
 
 /** 재생할 때는 맨 위에서 시작한다. 새로고침 때 브라우저가 스크롤 위치를 되살리면 대문을 못 본다 */
@@ -44,7 +30,6 @@ export function startIntro(app, mode) {
   const cover = app.querySelector(".cover");
   if (mode !== "play") {
     cover.classList.add("skip");
-    if (mode === "revisit") app.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 450, easing: "ease-out" });
     return;
   }
 

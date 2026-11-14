@@ -31,7 +31,7 @@ button:disabled { opacity: .5; cursor: default; }
 
 /* ---------- 대문 + 인트로(C안 · 잔광) ----------
    각 요소의 기본 스타일 = 인트로가 끝난 화면. 애니메이션은 시작 상태에서 여기로 온다.
-   .skip 이 붙으면(탭·스크롤·재방문) 애니메이션을 끄고 바로 끝 화면을 보여 준다.
+   .skip 이 붙으면(탭·스와이프, '동작 줄이기') 애니메이션을 끄고 바로 끝 화면을 보여 준다.
    위치는 화면 높이 비율(svh)이라, 수평선(46%)과 이름(62%)의 간격이 어느 폰에서나 같다. */
 .page:empty { background: #07080d; } /* 글꼴을 기다리는 동안 밝은 화면이 번쩍이지 않게 */
 .cover { position: relative; height: 100vh; height: 100svh; overflow: hidden; background: #07080d; color: #fbf5ee; }
@@ -202,9 +202,9 @@ legend, .field > span { display: block; margin-bottom: 8px; font: 500 13px/1.4 v
 .lb-prev { left: 0; }
 .lb-next { right: 0; }
 
-/* '동작 줄이기'를 켠 기기는 움직임 없이 끝 화면만. ?intro 확인 주소(.force-motion)는 예외 */
+/* '동작 줄이기'를 켠 기기는 움직임 없이 끝 화면만 */
 @media (prefers-reduced-motion: reduce) {
-  html:not(.force-motion) { scroll-behavior: auto; }
-  html:not(.force-motion) *, html:not(.force-motion) *::before, html:not(.force-motion) *::after { animation: none !important; transition: none !important; }
-  html:not(.force-motion) .cover .cover-hint { animation: none !important; }
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .cover.skip .cover-hint { animation: none !important; } /* 위의 건너뛰기용 화살표 까딱임보다 뒤에 와서 이긴다 */
 }
