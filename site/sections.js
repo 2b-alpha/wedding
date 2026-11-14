@@ -32,17 +32,19 @@ function cover(c) {
   const { groom, bride } = c.couple;
   const { photo } = c.cover;
   const bg = photo ? ` style="background-image:url('${esc(photo)}')"` : "";
+  // 인트로 순서: 수평선·빛(0.1s~) → 이름이 선 위로 떠오름(0.5s) → 사진이 원형으로 열림(1.3s)
+  //   → 이름이 제자리로 내려감(1.4s) → 날짜·장소·버튼(2.1s~) → 스크롤 안내(2.9s)
   return `
 <section id="cover" class="cover">
   <div class="cover-photo${photo ? "" : " is-empty"}"${bg}>${photo ? "" : `<span class="ph-label">대문 사진 (세로)</span>`}</div>
   <div class="cover-shade"></div>
-  <div class="cover-text">
-    <p class="cover-eyebrow fu" style="--d:.15s">Save the date</p>
-    <h1 class="cover-names fu" style="--d:.3s">${esc(groom.name)}<em>&amp;</em>${esc(bride.name)}</h1>
-    <p class="cover-when fu" style="--d:.45s">${formatDotEn(c.wedding.date)} · ${formatTimeKo(c.wedding.time)}</p>
-    <p class="cover-where fu" style="--d:.55s">${esc(venueLine(c.venue))}</p>
-    <a class="pill pill-light fu" style="--d:.75s" href="#location">오시는 길</a>
-  </div>
+  <div class="cover-glow" aria-hidden="true"></div>
+  <div class="cover-line" aria-hidden="true"></div>
+  <p class="cover-eyebrow fu" style="--d:2.1s">Save the date</p>
+  <h1 class="cover-names"><span>${esc(groom.name)}<em>&amp;</em>${esc(bride.name)}</span></h1>
+  <p class="cover-when fu" style="--d:2.2s">${formatDotEn(c.wedding.date)} · ${formatTimeKo(c.wedding.time)}</p>
+  <p class="cover-where fu" style="--d:2.3s">${esc(venueLine(c.venue))}</p>
+  <div class="cover-cta fu" style="--d:2.45s"><a class="pill pill-light" href="#location">오시는 길</a></div>
   <svg class="cover-hint" viewBox="0 0 20 12" aria-hidden="true"><path d="M2 2l8 8 8-8"/></svg>
 </section>`;
 }
