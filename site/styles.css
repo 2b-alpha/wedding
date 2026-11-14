@@ -202,7 +202,9 @@ legend, .field > span { display: block; margin-bottom: 8px; font: 500 13px/1.4 v
 .lb-prev { left: 0; }
 .lb-next { right: 0; }
 
+/* '동작 줄이기'를 켠 기기는 움직임 없이 끝 화면만. ?intro 확인 주소(.force-motion)는 예외 */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html:not(.force-motion) { scroll-behavior: auto; }
+  html:not(.force-motion) *, html:not(.force-motion) *::before, html:not(.force-motion) *::after { animation: none !important; transition: none !important; }
+  html:not(.force-motion) .cover .cover-hint { animation: none !important; }
 }

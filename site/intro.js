@@ -8,17 +8,28 @@ const FONT_WAIT_MS = 1500;
 
 /**
  * "play" | "revisit" | "reduced"
- * 처음 열면 재생, 다시 열면 생략(당일 지도를 찾으러 다시 여는 하객용). 주소에 ?intro 를 붙이면 항상 재생한다.
+ * 처음 열면 재생, 다시 열면 생략(당일 지도를 찾으러 다시 여는 하객용).
+ * 주소에 ?intro 를 붙이면 '동작 줄이기' 설정까지 무시하고 항상 재생한다(신랑·신부 확인용).
  */
 export function introMode() {
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return "reduced";
   let seen = false;
   try {
     seen = localStorage.getItem(SEEN_KEY) === "1";
     localStorage.setItem(SEEN_KEY, "1");
   } catch {}
-  if (new URLSearchParams(location.search).has("intro")) return "play";
+  if (new URLSearchParams(location.search).has("intro")) {
+    document.documentElement.classList.add("force-motion");
+    return "play";
+  }
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return "reduced";
   return seen ? "revisit" : "play";
+}
+
+/** 재생할 때는 맨 위에서 시작한다. 새로고침 때 브라우저가 스크롤 위치를 되살리면 대문을 못 본다 */
+export function prepareIntro(mode) {
+  if (mode !== "play") return;
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  scrollTo(0, 0);
 }
 
 /** 인트로에 쓰는 글꼴을 먼저 받아 둔다. 늦으면 기다리지 않고 시작한다 */
@@ -37,20 +48,16 @@ export function startIntro(app, mode) {
     return;
   }
 
+  // 사람이 직접 만진 경우에만 건너뛴다. scroll 이벤트는 브라우저가 위치를 되살릴 때도 와서 쓰지 않는다
   const events = ["pointerdown", "wheel", "touchmove", "keydown"];
   const skip = () => {
     cover.classList.add("skip");
     stop();
   };
-  const onScroll = () => {
-    if (scrollY > 8) skip();
-  };
   const stop = () => {
     events.forEach((t) => removeEventListener(t, skip));
-    removeEventListener("scroll", onScroll);
     clearTimeout(timer);
   };
   events.forEach((t) => addEventListener(t, skip, { passive: true }));
-  addEventListener("scroll", onScroll, { passive: true });
   const timer = setTimeout(stop, INTRO_MS);
 }

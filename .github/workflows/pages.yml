@@ -27,6 +27,13 @@ jobs:
         with:
           node-version: 22
       - run: npm test
+      # Pages 는 파일을 10분 캐시한다. 배포마다 파일 주소에 버전을 붙여, 폰에 남은 옛 파일과 새 파일이 섞이지 않게 한다
+      - name: Stamp asset URLs with the commit
+        run: |
+          v=${GITHUB_SHA::8}
+          sed -i -E "s#(from \"\./[a-z]+\.js)\"#\1?v=$v\"#g" site/*.js
+          sed -i -E "s#(src=\"main\.js|href=\"styles\.css)\"#\1?v=$v\"#g" site/index.html
+          grep -c "?v=$v" site/*.js site/index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

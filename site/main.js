@@ -1,6 +1,6 @@
 import config from "./config.js";
 import { countdown, weddingInstant } from "./dates.js";
-import { introMode, startIntro, waitForFonts } from "./intro.js";
+import { introMode, prepareIntro, startIntro, waitForFonts } from "./intro.js";
 import { initLightbox } from "./lightbox.js";
 import { initRsvp } from "./rsvp.js";
 import { galleryItems, renderPage } from "./sections.js";
@@ -8,6 +8,7 @@ import { copyText, toast } from "./ui.js";
 
 const app = document.getElementById("app");
 const mode = introMode();
+prepareIntro(mode);
 if (mode === "play") {
   const { groom, bride } = config.couple;
   await waitForFonts(`${groom.name}${bride.name}&Save the date 0123456789. SAT 오전오후낮시분 ${config.venue.name}${config.venue.address}${config.venue.hall}`);
