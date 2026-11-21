@@ -1,11 +1,12 @@
-// 대문(첫 화면) 시안 A~F.
-// 기본 주소(/wedding/)는 A, 비교용 주소는 /wedding/A/ ~ /wedding/F/ (폴더마다 index.html 에 data-variant 가 있다).
+// 대문(첫 화면) 시안 A~H.
+// 기본 주소(/wedding/)는 A, 비교용 주소는 /wedding/A/ ~ /wedding/H/ (폴더마다 index.html 에 data-variant 가 있다).
 // 하나로 정해지면 나머지 시안, 비교용 폴더, variantNav 를 지운다.
 // 움직임은 covers.css 에 있다. 요소의 기본 스타일이 인트로가 끝난 화면이고, 애니메이션은 시작 상태에서 그리로 온다.
 import { formatDotEn, formatTimeKo } from "./dates.js";
 import { asset, esc } from "./html.js";
+import { renderLettering } from "./lettering.js";
 
-export const COVER_NAMES = { A: "잔광", B: "필름", C: "문", D: "인화", E: "아치", F: "글자" };
+export const COVER_NAMES = { A: "잔광", B: "필름", C: "문", D: "인화", E: "아치", F: "글자", G: "The Wedding", H: "Save the Date" };
 
 const venueLine = (v) => (v.name ? `${v.name} ${v.hall}` : `${v.address}, ${v.hall}`);
 const hint = `<svg class="cover-hint" viewBox="0 0 20 12" aria-hidden="true"><path d="M2 2l8 8 8-8"/></svg>`;
@@ -141,7 +142,25 @@ const VARIANTS = {
   ${cta(2.7)}
   ${hint}${p.sample}
 </section>`,
+
+  // G · H 손글씨: 사진이 밝아오면 그 위에 사선 손글씨가 획 순서대로 써지고, 다 써지면 이름과 날짜가 떠오른다
+  G: (p) => lettered(p, "wedding", "The Wedding"),
+  H: (p) => lettered(p, "save", "Save the Date"),
 };
+
+function lettered(p, key, label) {
+  return `
+<section id="cover" class="cover cv-G" style="--hint-d:4.1s">
+  ${p.ph("cover-photo")}
+  <div class="cover-shade"></div>
+  <div class="g-lettering">${renderLettering(key, label, 0.9, 2.6)}</div>
+  <h1 ${fu("cover-names", 3.2)}>${p.names}</h1>
+  <p ${fu("cover-when", 3.35)}>${p.when}</p>
+  <p ${fu("cover-where", 3.45)}>${p.where}</p>
+  ${cta(3.6)}
+  ${hint}${p.sample}
+</section>`;
+}
 
 export function renderCover(c, variant = "A") {
   return (VARIANTS[variant] ?? VARIANTS.A)(parts(c));
