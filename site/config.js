@@ -75,6 +75,15 @@ export default {
     ],
   },
 
+  program: [
+    // TODO 예식 순서 예시 — J안에서 타임라인으로 보여 준다. 빼려면 [] 로 비운다
+    // icon: door(맞이) · rings(예식) · camera(사진) · meal(식사) · toast(축배)
+    { time: "12:30", title: "하객 맞이", icon: "door" },
+    { time: "13:00", title: "예식", icon: "rings" },
+    { time: "13:40", title: "사진 촬영", icon: "camera" },
+    { time: "14:00", title: "식사", icon: "meal" },
+  ],
+
   accounts: {
     message: "참석이 어려워 직접 축하를 전하지 못하는 분들을 위해\n계좌번호를 기재하였습니다. 너그러운 마음으로 양해 부탁드립니다.",
     // TODO 은행·계좌번호·예금주

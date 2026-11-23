@@ -5,14 +5,18 @@ import { prepareIntro } from "./intro.js";
 import { initLightbox } from "./lightbox.js";
 import { initRsvp } from "./rsvp.js";
 import { galleryItems, renderPage } from "./sections.js";
+import { initThemeJ, renderPageJ } from "./theme-j.js";
 import { copyText, toast } from "./ui.js";
 
 const app = document.getElementById("app");
 const { groom, bride } = config.couple;
 await prepareIntro(`${groom.name}${bride.name}&Save the date 0123456789. SAT 오전오후낮시분 ${config.venue.name}${config.venue.address}${config.venue.hall}`);
-// 대문 시안 비교용 페이지(/A/ ~ /H/)는 <html data-variant> 로 시안을 정한다. 기본 주소는 A
+// 대문 시안 비교용 페이지(/A/ ~ /H/, /J/)는 <html data-variant> 로 시안을 정한다. 기본 주소는 A
 const variant = document.documentElement.dataset.variant;
-app.innerHTML = renderPage(config, new Date(), variant ?? "A");
+// J안은 대문뿐 아니라 페이지 전체가 한 벌이라 따로 짠다 (theme-j.js)
+const isJ = variant === "J";
+app.innerHTML = isJ ? renderPageJ(config, new Date()) : renderPage(config, new Date(), variant ?? "A");
+if (isJ) initThemeJ(app);
 if (variant) document.body.insertAdjacentHTML("beforeend", variantNav(variant));
 
 initRsvp(app, config);

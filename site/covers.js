@@ -6,7 +6,8 @@ import { formatDotEn, formatTimeKo } from "./dates.js";
 import { asset, esc } from "./html.js";
 import { renderLettering } from "./lettering.js";
 
-export const COVER_NAMES = { A: "잔광", B: "필름", C: "문", D: "인화", E: "아치", F: "글자", G: "The Wedding", H: "Save the Date" };
+// J(프레스코)는 페이지 전체가 한 벌이고 대문도 theme-j.js 가 짠다. 여기에는 시안 이동 표시에 쓸 이름만 둔다
+export const COVER_NAMES = { A: "잔광", B: "필름", C: "문", D: "인화", E: "아치", F: "글자", G: "The Wedding", H: "Save the Date", J: "프레스코" };
 
 const venueLine = (v) => (v.name ? `${v.name} ${v.hall}` : `${v.address}, ${v.hall}`);
 const hint = `<svg class="cover-hint" viewBox="0 0 20 12" aria-hidden="true"><path d="M2 2l8 8 8-8"/></svg>`;

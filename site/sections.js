@@ -3,7 +3,7 @@ import { renderCover } from "./covers.js";
 import { daysUntil, formatDateKo, formatShortKo, formatTimeKo, isOpenUntil, monthGrid } from "./dates.js";
 import { asset, esc, lines } from "./html.js";
 
-const head = (eyebrow, title) =>
+export const head = (eyebrow, title) =>
   `<header class="sec-head"><p class="eyebrow">${eyebrow}</p>${title ? `<h2>${esc(title)}</h2>` : ""}</header>`;
 
 /** 사진 목록을 { src, thumb } (절대 주소) 로 통일. 사진이 없으면 빈 칸(placeholder)을 만든다 */
@@ -177,7 +177,10 @@ function footer(c) {
 </footer>`;
 }
 
-/** 페이지 전체. 섹션 순서는 여기서 바꾼다. variant 는 대문 시안(A~F) */
+/** 섹션을 따로 골라 쓰는 시안(J안, theme-j.js)을 위한 묶음 */
+export const sections = { greeting, rsvp, calendar, gallery, guide, accounts, location, footer };
+
+/** 페이지 전체. 섹션 순서는 여기서 바꾼다. variant 는 대문 시안(A~H). J안은 theme-j.js 의 renderPageJ 가 따로 짠다 */
 export function renderPage(c, now = new Date(), variant = "A") {
   return [renderCover(c, variant), greeting(c), rsvp(c, now), calendar(c, now), gallery(c), guide(c), accounts(c), location(c), footer(c)].join("");
 }
