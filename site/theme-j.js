@@ -233,6 +233,9 @@ export function renderPageJ(c, now = new Date()) {
   ].join("");
 }
 
+/** 봉투 영상 배속 (원본 8.0초 → 1.7배속 약 4.7초) */
+const ENVELOPE_SPEED = 1.7;
+
 /** 봉투: 누르면 영상이 재생되고, 끝나면 걷히며 대문 글자가 떠오른다. 한 번 더 누르면 건너뛴다.
  *  닫혀 있는 동안은 아래 내용이 먼저 보이지 않게 스크롤을 잠근다 */
 function initEnvelope(app) {
@@ -256,16 +259,21 @@ function initEnvelope(app) {
     root.classList.remove("lock");
     setTimeout(() => {
       env.remove();
-    }, 1000);
+    }, 700);
   };
   env.addEventListener("click", () => {
     if (stage !== "closed" || still) return finish();
     stage = "playing";
     hero.classList.add("is-playing");
+    video.defaultPlaybackRate = ENVELOPE_SPEED;
+    video.playbackRate = ENVELOPE_SPEED;
+    video.addEventListener("playing", () => {
+      video.playbackRate = ENVELOPE_SPEED;
+    }, { once: true });
     video.addEventListener("ended", finish, { once: true });
     video.addEventListener("error", finish, { once: true });
-    // 영상이 끝났다는 신호가 안 오는 브라우저를 위한 안전장치 (영상 길이 약 8초)
-    fallback = setTimeout(finish, 9500);
+    // 영상이 끝났다는 신호가 안 오는 브라우저를 위한 안전장치 (원본 8초 / 배속 + 여유)
+    fallback = setTimeout(finish, Math.ceil(8500 / ENVELOPE_SPEED) + 1200);
     video.play().catch(finish);
   });
 }

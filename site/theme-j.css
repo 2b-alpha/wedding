@@ -53,7 +53,7 @@
 /* 그림 가운데의 종이 카드가 글자 자리다. 화면 비율이 달라져도 카드 안에 들어오도록 자리를 %로 잡는다 */
 .h-hero { position: relative; height: max(100vh, 620px); height: max(100svh, 620px); overflow: hidden; background: var(--bg); color: var(--ink); }
 .h-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.h-hero-card { position: absolute; left: 0; right: 0; top: 23.5%; bottom: 21.5%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 21%; text-align: center; opacity: 0; transition: opacity 1.8s ease-out .15s; }
+.h-hero-card { position: absolute; left: 0; right: 0; top: 23.5%; bottom: 21.5%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 21%; text-align: center; opacity: 0; transition: opacity 1s ease-out .1s; }
 .h-hero.is-open .h-hero-card { opacity: 1; }
 .h-hero-names { display: flex; flex-direction: column; align-items: center; font: 400 31px/1.1 var(--serif); letter-spacing: .2em; }
 .h-hero-names span { padding-left: .2em; }
@@ -68,14 +68,14 @@
 .h-hero-when { margin-top: 20px; padding-left: .25em; font: 400 11px/1.6 var(--serif); letter-spacing: .25em; }
 .h-hero-where { margin-top: 5px; font: 400 15px/1.5 var(--serif); letter-spacing: .02em; }
 
-.h-scroll { position: absolute; left: 50%; bottom: calc(36px + env(safe-area-inset-bottom)); display: grid; place-items: center; width: 44px; height: 44px; margin-left: -22px; border: 1px solid hsl(var(--h-olive) / .1); border-radius: 50%; background: hsl(var(--h-cream) / .85); color: hsl(var(--h-olive) / .8); opacity: 0; transition: opacity 1.2s ease 1.2s; }
+.h-scroll { position: absolute; left: 50%; bottom: calc(36px + env(safe-area-inset-bottom)); display: grid; place-items: center; width: 44px; height: 44px; margin-left: -22px; border: 1px solid hsl(var(--h-olive) / .1); border-radius: 50%; background: hsl(var(--h-cream) / .85); color: hsl(var(--h-olive) / .8); opacity: 0; transition: opacity .9s ease .7s; }
 .h-hero.is-open .h-scroll { opacity: 1; }
 .h-scroll span { display: block; width: 20px; height: 20px; animation: hChevron 2.2s ease-in-out infinite; }
 .h-scroll svg { display: block; width: 100%; height: 100%; }
 @keyframes hChevron { 50% { transform: translateY(6px); } }
 
 /* 봉투: 대문 전체를 덮고 있다가 눌리면 영상이 재생되고(is-playing), 끝나면 걷힌다(is-open). 단계는 theme-j.js 가 붙인다 */
-.h-env { position: absolute; inset: 0; z-index: 5; width: 100%; padding: 0; border: 0; background: #000; overflow: hidden; cursor: pointer; transition: opacity .9s cubic-bezier(.22, 1, .36, 1); }
+.h-env { position: absolute; inset: 0; z-index: 5; width: 100%; padding: 0; border: 0; background: #000; overflow: hidden; cursor: pointer; transition: opacity .6s cubic-bezier(.22, 1, .36, 1); }
 .h-env > img, .h-env > video { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; }
 .h-env-poster { transition: opacity .45s ease; }
 .h-env-video { opacity: 0; transition: opacity .3s ease; }
